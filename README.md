@@ -1,3 +1,5 @@
+Follow these instructions for lab https://docs.google.com/document/d/1-s8d7NbJlLm5zAntAyCW4KDkMqx5YsRkkcVCpaXIcz0/edit?usp=sharing
+
 # Stock Data Explorer
 
 A Streamlit web application for visualizing stock price data through interactive dot plots and fetching real historical data from external APIs.
