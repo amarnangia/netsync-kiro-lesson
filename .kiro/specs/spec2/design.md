@@ -254,8 +254,6 @@ Raw API response structure (example based on typical stock APIs):
 
 *A property is a characteristic or behavior that should hold true across all valid executions of a system—essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
 
-### Stage 1 Properties
-
 ### Property 1: Data Generation Completeness
 
 *For any* stock ticker from the predefined list, the mock data generator should produce three lists (days, high_prices, low_prices) of equal length with all positive values.
@@ -280,23 +278,7 @@ Raw API response structure (example based on typical stock APIs):
 
 **Validates: Requirements 1.4, 3.5**
 
-### Stage 2 Properties
-
-### Property 5: Rate Limit Enforcement
-
-*For any* sequence of API calls, the time between consecutive calls should be at least 12 seconds (enforcing the 5 calls per minute rate limit).
-
-**Validates: Requirements 6.5**
-
-### Property 6: Stage Separation Invariant
-
-*For any* stock selection, the mock data dot plots (Stage 1) should continue to use generated mock data and should not be affected by or connected to API data (Stage 2).
-
-**Validates: Requirements 8.1, 8.2, 8.3, 8.4**
-
 ## Error Handling
-
-### Stage 1: Mock Data Generation
 
 ### Input Validation
 
@@ -314,36 +296,9 @@ Since the stock selector uses a predefined list, invalid inputs are prevented by
 - Provide fallback text representation of data
 - Log errors for debugging purposes
 
-### Stage 2: API Integration
-
-### API Connection Errors
-
-- **Connection failure**: Display "Unable to connect to API. Please check your internet connection."
-- **Timeout**: Display "Request timed out. Please try again."
-- **Invalid API key**: Display "API authentication failed. Please check your API key configuration."
-
-### API Response Errors
-
-- **Empty response**: Display "No data available for this stock ticker."
-- **Malformed JSON**: Display "Received invalid data from API."
-- **HTTP errors** (4xx, 5xx): Display "API request failed with error code: {code}"
-
-### Rate Limiting
-
-- **Rate limit exceeded**: Display "Rate limit reached. Please wait {seconds} seconds before making another request."
-- Track last request timestamp in session state
-- Prevent new requests until rate limit window passes
-
-### Configuration Errors
-
-- **Missing API key**: Display "API key not configured. Please set MASSIVE_API_KEY environment variable or update the API_KEY constant in the code."
-- Check for placeholder value "YOUR_API_KEY_HERE" and warn user
-
 ## Testing Strategy
 
 ### Unit Tests
-
-#### Stage 1 Tests
 
 1. **Test Mock Data Generator**
    - Verify correct number of data points generated
@@ -356,68 +311,27 @@ Since the stock selector uses a predefined list, invalid inputs are prevented by
    - Verify all prices are positive
    - Verify data types are correct
 
-#### Stage 2 Tests
-
-1. **Test API Fetcher**
-   - Test successful API call with mock response
-   - Test connection error handling
-   - Test empty response handling
-   - Test malformed JSON handling
-   - Test timeout handling
-
-2. **Test Rate Limiting**
-   - Test that rapid calls are delayed
-   - Test timestamp tracking
-   - Test rate limit message display
-
-3. **Test API Key Configuration**
-   - Test environment variable reading
-   - Test placeholder detection
-   - Test missing key warning
-
-4. **Test Error Display**
-   - Test each error type displays appropriate message
-   - Test error message formatting
-
 ### Property-Based Tests
 
 Property-based tests will use Hypothesis (Python PBT library) with minimum 100 iterations per test.
 
-#### Stage 1 Property Tests
-
 1. **Property Test: Data Invariants**
-   - **Feature: stock-data-explorer, Property 2: Price Invariant**
+   - **Feature: stock-data-explorer, Property 2: Data Consistency**
    - Generate random tickers and verify high >= low for all points
    - Verify all prices are positive
    - Verify equal list lengths
 
 2. **Property Test: Deterministic Generation**
-   - **Feature: stock-data-explorer, Property 3: Deterministic Data Generation**
+   - **Feature: stock-data-explorer, Property 3: Data Reproducibility**
    - Generate data for same ticker multiple times
    - Verify identical output each time
 
 3. **Property Test: Valid Output Structure**
-   - **Feature: stock-data-explorer, Property 1: Data Generation Completeness**
+   - **Feature: stock-data-explorer, Property 2: Data Consistency**
    - For any valid ticker, verify output is tuple of three lists
    - Verify all elements are correct types
 
-#### Stage 2 Property Tests
-
-1. **Property Test: Rate Limit Enforcement**
-   - **Feature: stock-data-explorer, Property 5: Rate Limit Enforcement**
-   - Simulate multiple API calls
-   - Verify minimum 12-second delay between calls
-   - Test with various call patterns
-
-2. **Property Test: Stage Separation**
-   - **Feature: stock-data-explorer, Property 6: Stage Separation Invariant**
-   - For any stock selection, verify mock data plots remain unchanged
-   - Verify API data display is separate from mock data plots
-   - Verify no data mixing between stages
-
 ### Integration Tests
-
-#### Stage 1 Integration Tests
 
 1. **Test Stock Selection Flow**
    - Simulate selecting different stocks
@@ -429,58 +343,18 @@ Property-based tests will use Hypothesis (Python PBT library) with minimum 100 i
    - Verify correct labels and titles appear
    - Verify plots display data correctly
 
-#### Stage 2 Integration Tests
-
-1. **Test API Integration Flow**
-   - Test full flow: select stock → fetch data → display raw JSON
-   - Verify loading states appear
-   - Verify error states display correctly
-
-2. **Test Stage Coexistence**
-   - Verify Stage 1 mock plots and Stage 2 API display work together
-   - Verify no interference between stages
-   - Verify both sections render correctly
-
 ### Manual Testing
-
-#### Stage 1 Manual Tests
 
 1. Run application and verify visual appearance
 2. Test searchable dropdown functionality
 3. Verify smooth transitions between stock selections
 4. Check responsive behavior and layout
 
-#### Stage 2 Manual Tests
-
-1. Test with valid API key - verify data fetches successfully
-2. Test with invalid API key - verify error message
-3. Test with no API key - verify configuration warning
-4. Test rate limiting by selecting multiple stocks rapidly
-5. Verify raw JSON display is readable and properly formatted
-6. Verify Stage 1 plots continue working alongside Stage 2 API display
-
 ## Implementation Notes
-
-### Stage 1 Notes
 
 - Use Streamlit version 1.x or higher
 - Leverage Streamlit's caching (`@st.cache_data`) for data generation to improve performance
 - Use matplotlib or Streamlit's native charting for dot plots
-- Keep all code in a single `stock_explorer.py` file
+- Keep all code in a single `app.py` or `stock_explorer.py` file
 - Add inline comments for clarity
 - Use type hints for better code documentation
-
-### Stage 2 Notes
-
-- Use `requests` library for API calls
-- Use `os.getenv()` for environment variable access
-- Store rate limit state in `st.session_state`
-- Use `st.spinner()` for loading indicators
-- Use `st.error()`, `st.warning()`, `st.info()` for user messages
-- Use `st.json()` for formatted JSON display
-- Use `st.expander()` for collapsible raw data section
-- Add clear comments marking:
-  - Where API key should be inserted
-  - Where future data processing will be added (Stage 3)
-  - Rate limiting logic
-  - Error handling sections

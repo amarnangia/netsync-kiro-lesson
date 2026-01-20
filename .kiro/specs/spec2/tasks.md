@@ -128,25 +128,25 @@ This implementation plan breaks down the Stock Data Explorer Streamlit applicati
 
 ## Stage 2 Tasks: API Integration
 
-- [x] 10. Set up API configuration and dependencies
-  - [x] 10.1 Add requests library to requirements.txt
+- [-] 10. Set up API configuration and dependencies
+  - [ ] 10.1 Add requests library to requirements.txt
     - Add `requests` package for HTTP API calls
     - _Requirements: 6.1_
 
-  - [x] 10.2 Create API configuration section
+  - [ ] 10.2 Create API configuration section
     - Define API_KEY constant with placeholder "YOUR_API_KEY_HERE"
     - Add environment variable fallback using `os.getenv("MASSIVE_API_KEY", "YOUR_API_KEY_HERE")`
     - Define API_BASE_URL constant
     - Add clear comments indicating where users should insert their API key
     - _Requirements: 6.3, 6.4, 8.7_
 
-  - [x] 10.3 Initialize session state for rate limiting
+  - [ ] 10.3 Initialize session state for rate limiting
     - Add session state variable for last API call timestamp
     - Initialize to None on first run
     - _Requirements: 6.5_
 
-- [x] 11. Implement API fetcher with rate limiting
-  - [x] 11.1 Create fetch_stock_data() function
+- [ ] 11. Implement API fetcher with rate limiting
+  - [ ] 11.1 Create fetch_stock_data() function
     - Accept ticker and api_key as parameters
     - Check if API key is placeholder value and return error if so
     - Implement rate limiting: check if 12 seconds have passed since last call
@@ -160,7 +160,7 @@ This implementation plan breaks down the Stock Data Explorer Streamlit applicati
     - Add comment: "TODO Stage 3: Process and transform this data"
     - _Requirements: 6.1, 6.2, 6.5, 8.5_
 
-  - [x] 11.2 Write unit test for API fetcher with mock responses
+  - [ ] 11.2 Write unit test for API fetcher with mock responses
     - Test successful API call returns dictionary
     - Test connection error returns None
     - Test timeout returns None
@@ -168,28 +168,28 @@ This implementation plan breaks down the Stock Data Explorer Streamlit applicati
     - Test placeholder API key detection
     - _Requirements: 6.1, 6.7, 6.8_
 
-  - [x] 11.3 Write unit test for rate limiting
+  - [ ] 11.3 Write unit test for rate limiting
     - Test that rapid calls are delayed
     - Test timestamp tracking in session state
     - Verify minimum 12-second delay enforced
     - _Requirements: 6.5_
 
-  - [x] 11.4 Write property test for rate limit enforcement
+  - [ ] 11.4 Write property test for rate limit enforcement
     - **Property 5: Rate Limit Enforcement**
     - **Validates: Requirements 6.5**
     - Simulate sequence of API calls
     - Verify time between consecutive successful calls >= 12 seconds
     - Configure test to run 100 iterations
 
-- [x] 12. Implement raw API data display
-  - [x] 12.1 Create display_raw_api_data() function
+- [ ] 12. Implement raw API data display
+  - [ ] 12.1 Create display_raw_api_data() function
     - Accept api_response dictionary as parameter
     - Use st.expander() with label "Raw API Data (Stage 2)"
     - Inside expander, use st.json() to display formatted response
     - Add type hints and docstring
     - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-  - [x] 12.2 Create display_api_error() function
+  - [ ] 12.2 Create display_api_error() function
     - Accept error_type and message as parameters
     - Use st.error() for connection/auth failures
     - Use st.warning() for rate limit messages
@@ -197,17 +197,17 @@ This implementation plan breaks down the Stock Data Explorer Streamlit applicati
     - Add type hints and docstring
     - _Requirements: 6.6, 6.7, 6.8_
 
-  - [x] 12.3 Write unit tests for display functions
+  - [ ] 12.3 Write unit tests for display functions
     - Test raw data display with sample JSON
     - Test error display for each error type
     - Verify correct Streamlit components used
     - _Requirements: 7.1, 7.2, 7.3_
 
-- [x] 13. Checkpoint - Ensure all Stage 2 tests pass
+- [ ] 13. Checkpoint - Ensure all Stage 2 tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [x] 14. Integrate API fetcher into main application
-  - [x] 14.1 Add API data fetching to main flow
+- [ ] 14. Integrate API fetcher into main application
+  - [ ] 14.1 Add API data fetching to main flow
     - After stock selection, add section divider or spacing
     - Add subheader "Stage 2: Real-Time API Data"
     - Check if API key is configured (not placeholder)
@@ -219,13 +219,13 @@ This implementation plan breaks down the Stock Data Explorer Streamlit applicati
     - Add comment: "TODO Stage 3: Connect API data to visualizations"
     - _Requirements: 6.1, 6.6, 7.4, 8.6_
 
-  - [x] 14.2 Verify Stage 1 remains unchanged
+  - [ ] 14.2 Verify Stage 1 remains unchanged
     - Ensure mock data plots still appear above API section
     - Verify mock data generation still uses same logic
     - Verify no data mixing between stages
     - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-  - [x] 14.3 Write property test for stage separation
+  - [ ] 14.3 Write property test for stage separation
     - **Property 6: Stage Separation Invariant**
     - **Validates: Requirements 8.1, 8.2, 8.3, 8.4**
     - For various stock selections, verify mock data plots use generated data
@@ -233,45 +233,45 @@ This implementation plan breaks down the Stock Data Explorer Streamlit applicati
     - Verify no connection between Stage 1 plots and Stage 2 API data
     - Configure test to run 100 iterations
 
-- [x] 15. Add comprehensive error handling and edge cases
-  - [x] 15.1 Add API key validation
+- [ ] 15. Add comprehensive error handling and edge cases
+  - [ ] 15.1 Add API key validation
     - Check for placeholder value before making requests
     - Display clear message: "Please configure your API key"
     - Provide instructions on how to set environment variable
     - _Requirements: 6.3, 6.4_
 
-  - [x] 15.2 Add rate limit user feedback
+  - [ ] 15.2 Add rate limit user feedback
     - Calculate and display seconds remaining until next call allowed
     - Show countdown or wait time message
     - _Requirements: 6.5_
 
-  - [x] 15.3 Test all error paths
+  - [ ] 15.3 Test all error paths
     - Test with missing API key
     - Test with invalid API key
     - Test with network disconnected (if possible)
     - Test rapid stock selections (rate limiting)
     - _Requirements: 6.7, 6.8_
 
-- [x] 16. Final documentation and code cleanup
-  - [x] 16.1 Add inline comments for Stage 2
+- [ ] 16. Final documentation and code cleanup
+  - [ ] 16.1 Add inline comments for Stage 2
     - Comment API configuration section
     - Comment rate limiting logic
     - Comment error handling sections
     - Add TODO comments for Stage 3 integration points
     - _Requirements: 5.1, 8.6, 8.7_
 
-  - [x] 16.2 Update module docstring
+  - [ ] 16.2 Update module docstring
     - Add Stage 2 description to file header
     - Document API requirements and configuration
     - _Requirements: 5.1_
 
-  - [x] 16.3 Verify code organization
+  - [ ] 16.3 Verify code organization
     - Ensure logical flow: Stage 1 code → Stage 2 code → main app
     - Verify clear separation between stages
     - Remove any unused imports
     - _Requirements: 5.2, 5.3_
 
-- [x] 17. Final checkpoint - Ensure all tests pass
+- [ ] 17. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
