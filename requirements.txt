@@ -1,0 +1,11 @@
+# Stock Data Explorer Dependencies
+
+# Core application framework
+streamlit>=1.30.0
+
+# Testing frameworks
+pytest>=7.4.0
+hypothesis>=6.92.0
+
+# Data visualization (matplotlib as backup for plotting)
+matplotlib>=3.8.0

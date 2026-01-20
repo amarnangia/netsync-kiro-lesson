@@ -1,0 +1,4 @@
+# file: /Users/amarnangia/Documents/GitHub/netsync-kiro-lesson/stock_explorer.py
+# hypothesis_version: 6.150.2
+
+[-0.05, 0.05, 0.97, 1.0, 1.03, 500, 'AAPL', 'ADBE', 'AMZN', 'BAC', 'CRM', 'DIS', 'GOOGL', 'HD', 'INTC', 'JNJ', 'JPM', 'MA', 'META', 'MSFT', 'NFLX', 'NVDA', 'PG', 'TSLA', 'V', 'WMT', '__main__']
